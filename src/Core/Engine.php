@@ -11,10 +11,7 @@ class Engine
      * 
      */
     public static function fire($process)
-    {
-        // Autoload
-        self::bootstrap();
-        
+    {        
         // Prepare di
         $di = new \Scripter\Core\Di();
 
