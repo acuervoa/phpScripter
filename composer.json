@@ -1,0 +1,13 @@
+{
+    "name": "wfg/scripter",
+    "type": "library",
+    "require": {
+        "phpseclib/phpseclib": "^2.0"
+    },
+    "authors": [
+        {
+            "name": "Emilio Rueda",
+            "email": "emilio.rueda@webfg.com"
+        }
+    ]
+}
