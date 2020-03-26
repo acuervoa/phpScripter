@@ -1,6 +1,6 @@
 <?php
 
-namespace Scripter\Driver;
+namespace Scripter\Service;
 
 /**
  * 

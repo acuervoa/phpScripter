@@ -19,12 +19,12 @@ class Di
     {
         // Services by default
         $this->set('zipper', function() {
-            return new \Scripter\Driver\Zipper();
+            return new \Scripter\Service\Zipper();
         });
 
         $this->set('logger', function() {
-            $logger = new \Scripter\Driver\Logger();
-            $logger->setOutputType(\Scripter\Driver\Logger::OUTPUT_TERMINAL);
+            $logger = new \Scripter\Service\Logger();
+            $logger->setOutputType(\Scripter\Service\Logger::OUTPUT_TERMINAL);
             return $logger;
         });
     }

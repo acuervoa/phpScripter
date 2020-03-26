@@ -65,7 +65,7 @@ class Script
     protected function setDatabase(array $database)
     {
         $this->di->set("db_{$database['name']}", function() use ($database) {
-            return new \Scripter\Driver\DB\DBDriver(
+            return new \Scripter\Service\DB\DBDriver(
                 $database['host'], 
                 $database['port'], 
                 $database['user'],
@@ -73,6 +73,14 @@ class Script
                 $database['database']
             );
         });
+    }
+
+    /**
+     * Set a database
+     */
+    protected function getDatabase(string $database): \Scripter\Service\DB\DBDriver
+    {
+        return $this->di->get("db_{$database}");
     }
 
     /**
@@ -91,7 +99,7 @@ class Script
     protected function setFTP(array $ftp)
     {
         $this->di->set("ftp_{$ftp['name']}", function() use ($ftp) {
-            return new \Scripter\Driver\FTP\FTPDriver(
+            return new \Scripter\Service\FTP\FTPDriver(
                 $ftp['host'], 
                 $ftp['port'], 
                 $ftp['user'],
