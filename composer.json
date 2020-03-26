@@ -10,5 +10,15 @@
             "name": "Emilio Rueda",
             "email": "emilio.rueda@webfg.com"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "Scripter\\": "./src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Scripter\\": "./src"
+        }
+    }
 }
