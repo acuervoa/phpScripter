@@ -1,6 +1,6 @@
 <?php
 
-namespace Scripter\Driver\FTP;
+namespace Scripter\Service\FTP;
 
 /**
  * 
@@ -24,7 +24,7 @@ class FTPDriver
         $status = $this->connection->login($user, $password);
         if (!$status) {
             // @todo control this error better
-            die ("LOgin failed");
+            die ("Login failed");
         }
         
     }

@@ -25,28 +25,97 @@ class DBDriver
      */
     public function execute($query)
     {
+        // Columns
         $q = ['select'];
         $q[] = \implode(', ', $query->getColumns());
 
+        // From
         $q[] = 'from';
-        $q[] = \implode(', ', $query->getFrom());
+        $q[] = "{$query->getFrom()[0]} {$query->getFrom()[1]}";
 
-        $q[] = 'where';
-        $q[] = \implode(', ', $query->getWhere());
+        // Joins
+        $joins = $query->getJoin();
+        if (!empty($joins)) {
+            $j = [];
+            foreach ($joins as $join) {
+                $j[] = \sprintf(
+                    "join %s %s on (%s)",
+                    $join[0],
+                    $join[2],
+                    $join[1]
+                );
+            }
+            $q[] = \implode(' ', $j);
+        }
 
+        // Where
+        $where = $query->getWhere();
+        if (!empty($where)) {
+            $q[] = 'where';
+            $q[] = \implode(', ', $where);
+        }
+
+        // Query Array to String
         $sq = \implode(' ', $q);
 
         // Binding if needed
         $binds = $query->getBinds();
         if (!empty($binds)) {
             foreach ($binds as $index => $bind) {
-                var_dump($index, $bind);
-                $sq = \preg_replace($index, $this->connection->mysqli_real_escape_string($bind), $sq);
+                $sq = \preg_replace("/{$index}/", '\'' . $this->connection->real_escape_string($bind) . '\'', $sq);
             }
         }
 
+        // Execute
+        $result = $this->connection->query($sq);
 
-        var_dump($sq);
-        die;
+        if ($this->connection->error) {
+            // @todo do this better
+            var_dump($this->connection->error);
+            die;
+        }
+
+        // Process
+        return $this->processMysqlResult($query, $result);
+    }
+
+    /**
+     * 
+     */
+    public function replaceOneRaw(string $table, array $data)
+    {
+        $q = "replace into %s (%s) values ('%s')";
+
+        $columns = \array_keys($data);
+        $values = \array_values($data);
+
+        $sq = \sprintf(
+            $q,
+            $table,
+            \implode(', ', $columns),
+            \implode('\', \'', $values)
+        );
+
+        $this->connection->query($sq);
+    }
+
+    /**
+     * 
+     */
+    private function processMysqlResult($query, \mysqli_result $result)
+    {
+        $return = [];
+        $keys = \array_keys($query->getColumns());
+
+        while ($row = $result->fetch_row()) {
+            $buffer = [];
+            foreach($row as $index => $column) {
+                $buffer[$keys[$index]] = $column;
+            }
+            $return[] = $buffer;
+        }
+        $result->close();
+
+        return $return;
     }
 }

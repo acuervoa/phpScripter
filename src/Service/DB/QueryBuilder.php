@@ -60,9 +60,9 @@ class QueryBuilder
     /**
      * 
      */
-    public function from(array $from): self
+    public function from(string $table, $ns = null): self
     {
-        $this->from = $from;
+        $this->from = [$table, $ns];
         return $this;
     }
 
@@ -81,6 +81,14 @@ class QueryBuilder
     {
         $this->join[] = [$table, $clause, $ns];
         return $this;
+    }
+
+    /**
+     * 
+     */
+    public function getJoin(): array
+    {
+        return $this->join;
     }
 
     /**
