@@ -1,6 +1,7 @@
 {
     "name": "wfg/scripter",
     "type": "library",
+    "version": "0.0.1",
     "require": {
         "phpseclib/phpseclib": "^2.0"
     },
