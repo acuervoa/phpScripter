@@ -38,6 +38,13 @@ class Script
             $this->setFTPs($json['ftps']);
         }
 
+        // Auto setters
+        $logger = new \Scripter\Driver\Logger();
+        $logger->setOutputType(\Scripter\Driver\Logger::OUTPUT_TERMINAL);
+        $this->setLogger($logger);
+
+
+
         $this->di->set('configuration', $json);
     }   
 
@@ -98,6 +105,22 @@ class Script
                 $ftp['password']
             );
         });
+    }
+
+    /**
+     * 
+     */
+    public function setLogger($logger)
+    {
+        $this->di->set('logger', $logger);   
+    }
+
+    /**
+     * 
+     */
+    public function log($message, $level = null)
+    {
+        $this->di->get('logger')->log($message, $level);
     }
 
     /**

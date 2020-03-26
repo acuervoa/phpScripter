@@ -17,29 +17,41 @@ class FTPDriver
      */
     public function __construct($host, $port, $user, $password)
     {
-        // Timeout 5 segundos
-        $dir = "ssh2.sftp://sftpcofisem:vZAKEAe#!NtZ@sftp.webfg.com:22/./"; 
-        $handle = opendir($dir);
-
-        $this->connection = \ftp_ssl_connect($host, $port, 3);
-
-        if ($this->connection) {
-            \ftp_pasv($this->connection, true);
-            \ftp_login($this->connection, $user, $password);
-        } else {
+        // Init connection
+        $this->connection = new \phpseclib\Net\SFTP($host);
+        
+        // Login
+        $status = $this->connection->login($user, $password);
+        if (!$status) {
             // @todo control this error better
-            die("Error connection FTP");
+            die ("LOgin failed");
         }
         
     }
 
     /**
+     * Download multiple files by pattern
      * 
-     */
-    public function getFiles($source, $target)
+     * @param string $path -> Path in the FTP
+     * @param string $pattern -> Pattern of the files to be donwloaded
+     * @param string $target -> Local path to download the files
+     * @return bool true if success
+     */ 
+    public function getFiles($path, $pattern, $target): bool
     {
-        var_dump($this->connection);
-        var_dump(\ftp_rawlist($this->connection, $source));
-        die;
+        // Get all files of the path
+        $files = \array_keys($this->connection->rawlist($path));
+
+        // Get files by pattern
+        $filtered = \array_filter($files, function(&$element) use ($pattern) {
+            \preg_match($pattern, $element, $matches);
+            return !empty($matches);
+        });
+
+        \array_walk($filtered, function(&$element) use ($path, $target) {
+            $this->connection->get("$path/$element", "$target/$element");
+        });
+
+        return true;
     }
 }
