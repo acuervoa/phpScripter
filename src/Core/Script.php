@@ -10,7 +10,7 @@ class Script
     /**
      * 
      */
-    private $di;
+    protected $di;
 
     /**
      * 
@@ -37,13 +37,6 @@ class Script
         if (isset($json['ftps'])) {
             $this->setFTPs($json['ftps']);
         }
-
-        // Auto setters
-        $logger = new \Scripter\Driver\Logger();
-        $logger->setOutputType(\Scripter\Driver\Logger::OUTPUT_TERMINAL);
-        $this->setLogger($logger);
-
-
 
         $this->di->set('configuration', $json);
     }   

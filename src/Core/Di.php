@@ -15,6 +15,23 @@ class Di
     /**
      * 
      */
+    public function __construct()
+    {
+        // Services by default
+        $this->set('zipper', function() {
+            return new \Scripter\Driver\Zipper();
+        });
+
+        $this->set('logger', function() {
+            $logger = new \Scripter\Driver\Logger();
+            $logger->setOutputType(\Scripter\Driver\Logger::OUTPUT_TERMINAL);
+            return $logger;
+        });
+    }
+
+    /**
+     * 
+     */
     public function set(string $key, $value) 
     {
         $this->dependencies[$key] = $value;
