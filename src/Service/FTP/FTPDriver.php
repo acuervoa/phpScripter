@@ -6,7 +6,7 @@ namespace Scripter\Service\FTP;
  * 
  */
 class FTPDriver
-{   
+{ 
     /**
      * 
      */
@@ -39,6 +39,8 @@ class FTPDriver
      */ 
     public function getFiles($path, $pattern, $target): bool
     {
+        $pattern = "/$pattern/";
+
         // Get all files of the path
         $files = \array_keys($this->connection->rawlist($path));
 

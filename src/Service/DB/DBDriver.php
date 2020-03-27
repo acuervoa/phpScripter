@@ -84,11 +84,18 @@ class DBDriver
      */
     public function replaceOneRaw(string $table, array $data)
     {
+        //
         $q = "replace into %s (%s) values ('%s')";
 
         $columns = \array_keys($data);
         $values = \array_values($data);
 
+        // Avoid SQL injection
+        \array_walk($values, function(&$element) {
+            $element = $this->connection->real_escape_string($element);
+        });
+
+        //
         $sq = \sprintf(
             $q,
             $table,
@@ -96,6 +103,7 @@ class DBDriver
             \implode('\', \'', $values)
         );
 
+        //
         $this->connection->query($sq);
     }
 
