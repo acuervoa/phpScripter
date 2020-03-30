@@ -29,6 +29,6 @@ class Engine
          * Show end message and process duration
          */
         $endTime = \microtime(true);
-        echo "\n\n Process end! Duration: " . ($endTime - $startTime) . PHP_EOL;
+        echo "\n\nProcess end! Duration: " . ($endTime - $startTime) . PHP_EOL;
     }
 }
