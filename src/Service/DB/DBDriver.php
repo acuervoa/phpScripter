@@ -110,6 +110,39 @@ class DBDriver
     /**
      * 
      */
+    public function deleteRaw(string $table, array $data)
+    {
+        //
+        $q = \sprintf(
+            "delete from %s",
+            $table
+        );
+
+        // Where clause
+        if (!empty($data)) {
+            $where = [];
+            foreach ($data as $field => $value) {
+                $where[] = \sprintf(
+                    '%s=\'%s\'',
+                    $field,
+                    $this->connection->real_escape_string($value)
+                );
+            }
+
+            $q = \sprintf(
+                $q . ' %s %s',
+                ' where ',
+                \implode(' AND ', $where)
+            );
+        }
+
+        //
+        $this->connection->query($q);
+    }
+
+    /**
+     * 
+     */
     private function processMysqlResult($query, \mysqli_result $result)
     {
         $return = [];
