@@ -62,7 +62,18 @@ class DBDriver
         $binds = $query->getBinds();
         if (!empty($binds)) {
             foreach ($binds as $index => $bind) {
-                $sq = \preg_replace("/{$index}/", '\'' . $this->connection->real_escape_string($bind) . '\'', $sq);
+                // If array => In clause
+                if (\is_array($bind)) {
+                    \array_walk($bind, function(&$element) {
+                        $element = '\'' . $this->connection->real_escape_string($element) . '\'';
+                    });
+                    $value = \implode(', ', $bind);
+                }
+                // If no array => Equal clause 
+                else {
+                    $value = '\'' . $this->connection->real_escape_string($bind) . '\'';
+                }
+                $sq = \preg_replace("/{$index}/", $value, $sq);
             }
         }
 
