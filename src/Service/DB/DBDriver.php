@@ -116,6 +116,12 @@ class DBDriver
 
         //
         $this->connection->query($sq);
+
+        if ($this->connection->error) {
+            // @todo do this better
+            var_dump($this->connection->error);
+            die;
+        }
     }
 
     /**
