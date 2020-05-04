@@ -30,6 +30,16 @@ class QueryBuilder
     /**
      * 
      */
+    private $groupBy = [];
+
+    /**
+     * 
+     */
+    private $having;
+
+    /**
+     * 
+     */
     private $binds = [];
 
     /**
@@ -123,5 +133,39 @@ class QueryBuilder
     public function getBinds(): array
     {
         return $this->binds;
+    }
+
+    /**
+     * 
+     */
+    public function groupBy(array $groupBy): self
+    {
+        $this->groupBy = $groupBy;
+        return $this;
+    }
+
+    /**
+     * 
+     */
+    public function getGroupBy(): array
+    {
+        return $this->groupBy;
+    }
+
+    /**
+     * 
+     */
+    public function having(string $having): self
+    {
+        $this->having = $having;
+        return $this;
+    }
+
+    /**
+     * 
+     */
+    public function getHaving(): ?string
+    {
+        return $this->having;
     }
 }

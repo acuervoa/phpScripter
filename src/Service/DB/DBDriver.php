@@ -55,6 +55,20 @@ class DBDriver
             $q[] = \implode(', ', $where);
         }
 
+        // Group by
+        $groupBy = $query->getGroupBy();
+        if (!empty($groupBy)) {
+            $q[] = 'group by';
+            $q[] = \implode(', ', $groupBy);
+        }
+
+        // Having
+        $having = $query->getHaving();
+        if (!empty($having)) {
+            $q[] = 'having';
+            $q[] = $having;
+        }
+
         // Query Array to String
         $sq = \implode(' ', $q);
 
